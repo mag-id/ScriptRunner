@@ -1,0 +1,7 @@
+{
+    "priority": 2,
+    "script": "second_script.py",
+    "arguments": ["5"],
+    "failures": "stop",
+    "next_config": false
+}
