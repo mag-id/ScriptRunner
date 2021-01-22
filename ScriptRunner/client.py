@@ -5,7 +5,7 @@ from typing import Dict, List
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-from dash import Dash
+from dash import Dash, callback_context
 from dash.dependencies import Input, Output
 from filehandler import config_handler, script_handler
 from prototype import submit_python_queue
@@ -71,7 +71,7 @@ app.layout = html.Div(
     ],
     prevent_initial_call=False,
 )
-def upload_and_update_configs(filenames: List[str], contents: List[str]) -> List[Dict]:
+def upload_or_update_configs(filenames: List[str], contents: List[str]) -> List[Dict]:
     if filenames and contents:
         for filename, content in zip(filenames, contents):
             config_handler.write_uploaded_file(filename, content)
@@ -86,7 +86,7 @@ def upload_and_update_configs(filenames: List[str], contents: List[str]) -> List
     ],
     prevent_initial_call=False,
 )
-def upload_and_update_scripts(filenames: List[str], contents: List[str]) -> List[Dict]:
+def upload_or_update_scripts(filenames: List[str], contents: List[str]) -> List[Dict]:
     if filenames and contents:
         for filename, content in zip(filenames, contents):
             script_handler.write_uploaded_file(filename, content)
@@ -116,26 +116,28 @@ def get_script(value: str) -> str or None:
 @app.callback(
     Output(component_id="config-none", component_property="children"),
     [
+        Input(component_id="config-update", component_property="n_clicks"),
         Input(component_id="config-dropdown", component_property="value"),
         Input(component_id="config-textarea", component_property="value"),
     ],
-    prevent_initial_call=False,
+    prevent_initial_call=True,
 )
-def update_config(name_value: str or None, content_value: str or None):
-    if name_value:
+def update_config(n_clicks: int, name_value: str or None, content_value: str or None):
+    if triggered_by("config-update.n_clicks") and name_value:
         config_handler.write_file(name=name_value, content=content_value)
 
 
 @app.callback(
     Output(component_id="script-none", component_property="children"),
     [
+        Input(component_id="script-update", component_property="n_clicks"),
         Input(component_id="script-dropdown", component_property="value"),
         Input(component_id="script-textarea", component_property="value"),
     ],
-    prevent_initial_call=False,
+    prevent_initial_call=True,
 )
-def update_script(name_value: str or None, content_value: str or None):
-    if name_value:
+def update_script(n_clicks: int, name_value: str or None, content_value: str or None):
+    if triggered_by("script-update.n_clicks") and name_value:
         script_handler.write_file(name=name_value, content=content_value)
 
 
@@ -147,3 +149,8 @@ def update_script(name_value: str or None, content_value: str or None):
 )
 def submit(n_clicks):
     submit_python_queue()
+
+
+# https://stackoverflow.com/questions/62671226/
+def triggered_by(id_: str) -> bool:
+    return id_ in [item["prop_id"] for item in callback_context.triggered][0]
