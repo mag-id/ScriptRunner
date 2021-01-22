@@ -12,33 +12,57 @@ __all__ = ["config_handler", "script_handler"]
 
 
 class FileHandler:
+    """
+    Class for handllig files in specific `directory`.
+    """
+
     def __init__(self, directory: Path):
         self.__dir = directory
 
     @property
     def directory(self) -> Path:
+        """
+        Returns specified directory.
+        """
         return self.__dir
 
     @property
     def file_names(self) -> List[str]:
+        """
+        Returns file names from directory.
+        """
         _, _, names = next(walk(self.__dir))
         return names
 
     def read_file(self, name: str, encoding: str = "utf-8") -> str:
+        """
+        Returns file content according to `name` (by default `encoding` is `"utf-8"`).
+        """
         with open(file=self.__dir / name, mode="r", encoding=encoding) as file:
             return file.read()
 
     def write_file(self, name: str, content: str, encoding: str = "utf-8"):
+        """
+        Takes file `name` and `content`, writes it to the `directory`
+        (by default `encoding` is `"utf-8"`).
+        """
         with open(file=self.__dir / name, mode="w", encoding=encoding) as file:
             file.write(content)
 
     def write_uploaded_file(self, name: str, content: str):
+        """
+        Takes file `name` and `content` as an encoded
+        string, writes it to the `directory`.
+        """
         _type, encoded_string = content.split(",")
         decoded_string = b64decode(encoded_string)
         with open(file=self.__dir / name, mode="wb") as file:
             file.write(decoded_string)
 
     def delete_file(self, name: str):
+        """
+        Delete file from `directory` according to `name`.
+        """
         remove(path=self.__dir / name)
 
 

@@ -15,9 +15,6 @@ __all__ = ["app"]
 app = Dash(__name__, prevent_initial_callbacks=False)
 
 
-# LAYOUT
-
-
 app.layout = html.Div(
     children=[
         html.H1("ScriptRunner"),
@@ -64,8 +61,6 @@ app.layout = html.Div(
 )
 
 
-# CALLBACKS
-# ========================================================= upload and update dropdown
 @app.callback(
     Output(component_id="config-dropdown", component_property="options"),
     [
@@ -75,6 +70,10 @@ app.layout = html.Div(
     prevent_initial_call=False,
 )
 def upload_or_update_configs(filenames: List[str], contents: List[str]) -> List[Dict]:
+    """
+    Uploads and constructs files from `filenames` and encoded `contents`. Checks and
+    writes `config_handler.directory` and writes all names into `config-dropdown` menu.
+    """
     if filenames and contents:
         for filename, content in zip(filenames, contents):
             config_handler.write_uploaded_file(filename, content)
@@ -90,19 +89,26 @@ def upload_or_update_configs(filenames: List[str], contents: List[str]) -> List[
     prevent_initial_call=False,
 )
 def upload_or_update_scripts(filenames: List[str], contents: List[str]) -> List[Dict]:
+    """
+    Uploads and constructs files from `filenames` and encoded `contents`. Checks and
+    writes `script_handler.directory` and writes all names into `script-dropdown` menu.
+    """
     if filenames and contents:
         for filename, content in zip(filenames, contents):
             script_handler.write_uploaded_file(filename, content)
     return [{"label": name, "value": name} for name in script_handler.file_names]
 
 
-# ========================================================= read content to the textarea
 @app.callback(
     Output(component_id="config-textarea", component_property="value"),
     Input(component_id="config-dropdown", component_property="value"),
     prevent_initial_call=False,
 )
 def get_config(value: str) -> str or None:
+    """
+    Returns content of the selected in `config-dropdown`
+    menu file and places it into `config-textarea`.
+    """
     return config_handler.read_file(name=value) if value else None
 
 
@@ -112,12 +118,18 @@ def get_config(value: str) -> str or None:
     prevent_initial_call=False,
 )
 def get_script(value: str) -> str or None:
+    """
+    Returns content of the selected in `script-dropdown`
+    menu file and places it into `script-textarea`.
+    """
     return script_handler.read_file(name=value) if value else None
 
 
-# ========================================================= write content from textarea
 # https://stackoverflow.com/questions/62671226/
 def triggered_by(id_: str) -> bool:
+    """
+    Returns `True` if `id_` in the input triggers.
+    """
     return id_ in [item["prop_id"] for item in callback_context.triggered][0]
 
 
@@ -131,6 +143,10 @@ def triggered_by(id_: str) -> bool:
     prevent_initial_call=True,
 )
 def update_config(n_clicks: int, name_value: str or None, content_value: str or None):
+    """
+    Updates `config-textarea` content of the selected in `config-dropdown`
+    menu file after `config-update` trigger (button pressing).
+    """
     if triggered_by("config-update.n_clicks") and name_value:
         config_handler.write_file(name=name_value, content=content_value)
 
@@ -145,11 +161,14 @@ def update_config(n_clicks: int, name_value: str or None, content_value: str or 
     prevent_initial_call=True,
 )
 def update_script(n_clicks: int, name_value: str or None, content_value: str or None):
+    """
+    Updates `script-textarea` content of the selected in `script-dropdown`
+    menu file after `script-update` trigger (button pressing).
+    """
     if triggered_by("script-update.n_clicks") and name_value:
         script_handler.write_file(name=name_value, content=content_value)
 
 
-# =========================================================================== submit
 @app.callback(
     Output(component_id="submit-output", component_property="children"),
     Input(component_id="submit-button", component_property="n_clicks"),
