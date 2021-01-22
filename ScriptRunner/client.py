@@ -8,7 +8,7 @@ import dash_html_components as html
 from dash import Dash, callback_context
 from dash.dependencies import Input, Output
 from filehandler import config_handler, script_handler
-from prototype import submit_python_queue
+from pipeline import submit_tasks
 
 __all__ = ["app"]
 
@@ -156,4 +156,4 @@ def update_script(n_clicks: int, name_value: str or None, content_value: str or 
     prevent_initial_call=True,
 )
 def submit(n_clicks):
-    submit_python_queue()
+    submit_tasks()
