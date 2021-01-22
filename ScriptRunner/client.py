@@ -55,7 +55,10 @@ app.layout = html.Div(
         ),
         html.Div(
             id="submit",
-            children=[html.Button("Submit", id="submit-button", n_clicks=0)],
+            children=[
+                html.Button("Submit", id="submit-button", n_clicks=0),
+                html.Div(id="submit-output"),
+            ],
         ),
     ]
 )
@@ -113,6 +116,11 @@ def get_script(value: str) -> str or None:
 
 
 # ========================================================= write content from textarea
+# https://stackoverflow.com/questions/62671226/
+def triggered_by(id_: str) -> bool:
+    return id_ in [item["prop_id"] for item in callback_context.triggered][0]
+
+
 @app.callback(
     Output(component_id="config-none", component_property="children"),
     [
@@ -143,14 +151,9 @@ def update_script(n_clicks: int, name_value: str or None, content_value: str or 
 
 # =========================================================================== submit
 @app.callback(
-    Output(component_id="submit", component_property="children"),
+    Output(component_id="submit-output", component_property="children"),
     Input(component_id="submit-button", component_property="n_clicks"),
     prevent_initial_call=True,
 )
 def submit(n_clicks):
     submit_python_queue()
-
-
-# https://stackoverflow.com/questions/62671226/
-def triggered_by(id_: str) -> bool:
-    return id_ in [item["prop_id"] for item in callback_context.triggered][0]

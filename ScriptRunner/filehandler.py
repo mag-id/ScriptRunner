@@ -42,5 +42,5 @@ class FileHandler:
         remove(path=self.__dir / name)
 
 
-config_handler = FileHandler(Path("ScriptRunner/data/scripts"))
-script_handler = FileHandler(Path("ScriptRunner/data/configs"))
+config_handler = FileHandler(Path("ScriptRunner/data/configs"))
+script_handler = FileHandler(Path("ScriptRunner/data/scripts"))
