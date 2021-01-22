@@ -34,7 +34,7 @@ app.layout = html.Div(
                 dcc.Textarea(id="config-textarea"),
                 dbc.Button("update", id="config-update"),
                 dbc.Button("delete", id="config-delete"),
-                html.Div(id="config-none"),
+                html.Div(id="config-output"),
             ],
         ),
         html.Div(
@@ -50,7 +50,7 @@ app.layout = html.Div(
                 dcc.Textarea(id="script-textarea"),
                 dbc.Button("update", id="script-update"),
                 dbc.Button("delete", id="script-delete"),
-                html.Div(id="script-none"),
+                html.Div(id="script-output"),
             ],
         ),
         html.Div(
@@ -122,7 +122,7 @@ def triggered_by(id_: str) -> bool:
 
 
 @app.callback(
-    Output(component_id="config-none", component_property="children"),
+    Output(component_id="config-output", component_property="children"),
     [
         Input(component_id="config-update", component_property="n_clicks"),
         Input(component_id="config-dropdown", component_property="value"),
@@ -136,7 +136,7 @@ def update_config(n_clicks: int, name_value: str or None, content_value: str or 
 
 
 @app.callback(
-    Output(component_id="script-none", component_property="children"),
+    Output(component_id="script-output", component_property="children"),
     [
         Input(component_id="script-update", component_property="n_clicks"),
         Input(component_id="script-dropdown", component_property="value"),
