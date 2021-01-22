@@ -1,3 +1,7 @@
+"""
+Task priority queue pipeline.
+"""
+
 from queue import PriorityQueue
 from subprocess import run
 from typing import List, Tuple
