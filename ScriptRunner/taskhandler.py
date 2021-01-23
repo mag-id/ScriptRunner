@@ -18,7 +18,7 @@ class Task:
     + `script` - String name of the script.
     + `arguments` - List of strings represents script arguments.
     + `failures` - Strings with `pipeline` scpecific keyworks for exception processing.
-    + `next_config` - String with path to the script config for next execution.
+    + `next_config` - String with name of the script config for next execution.
 
     Methods:
     --------
