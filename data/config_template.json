@@ -1,6 +1,0 @@
-{
-    "priority": 1,
-    "arguments": ["echo", "script"],
-    "failures": "STOP",
-    "next_config": false
-}
