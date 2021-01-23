@@ -1,20 +1,48 @@
 # ScriptRunner
 
 ## Description
-The final project for EPAM Autumn 2020 Python Course.
+The final project for EPAM Autumn 2020 Python Course is **ScriptRunner - script launcher on a server with a web interface.**
 
-Финальный проект - запускатель скриптов на сервере с вэб-интерфейсом.
+## Original requirements
 
-1. Приложение стартует на (удалённой) машине,
-в конфигурации указана папка, в которой будут находиться
-скрипты для запуска и папка с конфигурациями для этих скриптов.
-Если есть скрипты без конфигов, то приложение их не трогает.
+1. Application:
+ * The app starts on a remote server.
+ * The app has a configuration with a scripts folder and script configurations folder.
+ * Scripts without configurations are not run.
+2. Script configuration:
+ * Run parameters.
+ * Run priority.
+ * What to do while scrips errors.
+ * Which script to run next (must have configuration).
+3. Functionality:
+ * Script configuration edit form.
 
-2. В конфигурации можно указать:
-  * параметры для запуска
-  * приоритет запуска
-  * что делать, если скрипт завершится с ошибкой
-  * какой скрипт запустить следующим
-  (до запуска цепочки скриптов нужно проверить, что для всех есть конфигурация)
+## ScriptRunner v.1 functionality
 
-3. Форма для редактирования конфигурации скрипта.
+* **Only Python scripts!**
+* See and update script configs.
+* See scripts and their code.
+* Submit scripts queue.
+* Use `"skip"` and `"stop"` keywords for controlling exception processing.
+
+### Script config format
+
+```
+{
+    "priority": 0,
+    "script": "name.py",
+    "arguments": ["arg", "arg"],
+    "failures": "stop",
+    "next_config": false
+}
+```
+
+* `"priority"` - Integer represents task priority.
+* `"script"` - Name of the Python script.
+* `"arguments"` - Script arguments.
+* `"failures"` - Specific keywords for controlling exception processing:
+    * `"skip"` - skip exception and go to the next task.
+    * `"stop"` - stop scripts queue execution.
+* `"next_config"` - deside what do after:
+    * `"false"` - executes next script from queue according to their priopities.
+    * `"name.json"` - script config which will be executed next out of priority.
