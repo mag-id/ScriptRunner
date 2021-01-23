@@ -7,6 +7,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash import Dash, callback_context
 from dash.dependencies import Input, Output
+from exceptions import StopScriptRunnerExc
 from filehandler import config_handler, script_handler
 from pipeline import submit_tasks
 
@@ -22,15 +23,10 @@ app.layout = html.Div(
             id="config",
             children=[
                 html.H2("Configs"),
-                dcc.Upload(
-                    id="config-upload",
-                    multiple=True,
-                    children=html.Div(["Drag and Drop or ", html.A("Select Configs")]),
-                ),
                 dcc.Dropdown(id="config-dropdown"),
                 dcc.Textarea(id="config-textarea"),
                 dbc.Button("update", id="config-update"),
-                dbc.Button("delete", id="config-delete"),
+                html.Div(id="config-input"),
                 html.Div(id="config-output"),
             ],
         ),
@@ -38,22 +34,15 @@ app.layout = html.Div(
             id="script",
             children=[
                 html.H2("Scripts"),
-                dcc.Upload(
-                    id="script-upload",
-                    multiple=True,
-                    children=html.Div(["Drag and Drop or ", html.A("Select Scripts")]),
-                ),
                 dcc.Dropdown(id="script-dropdown"),
                 dcc.Textarea(id="script-textarea"),
-                dbc.Button("update", id="script-update"),
-                dbc.Button("delete", id="script-delete"),
-                html.Div(id="script-output"),
+                html.Div(id="script-input"),
             ],
         ),
         html.Div(
             id="submit",
             children=[
-                html.Button("Submit", id="submit-button", n_clicks=0),
+                html.Button("Submit scripts queue", id="submit-button", n_clicks=0),
                 html.Div(id="submit-output"),
             ],
         ),
@@ -63,39 +52,25 @@ app.layout = html.Div(
 
 @app.callback(
     Output(component_id="config-dropdown", component_property="options"),
-    [
-        Input(component_id="config-upload", component_property="filename"),
-        Input(component_id="config-upload", component_property="contents"),
-    ],
+    Input(component_id="config-input", component_property="children"),
     prevent_initial_call=False,
 )
-def upload_or_update_configs(filenames: List[str], contents: List[str]) -> List[Dict]:
+def update_configs_dropdown(_) -> List[Dict]:
     """
-    Uploads and constructs files from `filenames` and encoded `contents`. Checks and
-    writes `config_handler.directory` and writes all names into `config-dropdown` menu.
+    Checks `config_handler.directory` and writes all names into `config-dropdown` menu.
     """
-    if filenames and contents:
-        for filename, content in zip(filenames, contents):
-            config_handler.write_uploaded_file(filename, content)
     return [{"label": name, "value": name} for name in config_handler.file_names]
 
 
 @app.callback(
     Output(component_id="script-dropdown", component_property="options"),
-    [
-        Input(component_id="script-upload", component_property="filename"),
-        Input(component_id="script-upload", component_property="contents"),
-    ],
+    Input(component_id="script-input", component_property="children"),
     prevent_initial_call=False,
 )
-def upload_or_update_scripts(filenames: List[str], contents: List[str]) -> List[Dict]:
+def update_scripts_dropdown(_) -> List[Dict]:
     """
-    Uploads and constructs files from `filenames` and encoded `contents`. Checks and
-    writes `script_handler.directory` and writes all names into `script-dropdown` menu.
+    Checks `script_handler.directory` and writes all names into `script-dropdown` menu.
     """
-    if filenames and contents:
-        for filename, content in zip(filenames, contents):
-            script_handler.write_uploaded_file(filename, content)
     return [{"label": name, "value": name} for name in script_handler.file_names]
 
 
@@ -152,27 +127,15 @@ def update_config(n_clicks: int, name_value: str or None, content_value: str or 
 
 
 @app.callback(
-    Output(component_id="script-output", component_property="children"),
-    [
-        Input(component_id="script-update", component_property="n_clicks"),
-        Input(component_id="script-dropdown", component_property="value"),
-        Input(component_id="script-textarea", component_property="value"),
-    ],
-    prevent_initial_call=True,
-)
-def update_script(n_clicks: int, name_value: str or None, content_value: str or None):
-    """
-    Updates `script-textarea` content of the selected in `script-dropdown`
-    menu file after `script-update` trigger (button pressing).
-    """
-    if triggered_by("script-update.n_clicks") and name_value:
-        script_handler.write_file(name=name_value, content=content_value)
-
-
-@app.callback(
     Output(component_id="submit-output", component_property="children"),
     Input(component_id="submit-button", component_property="n_clicks"),
     prevent_initial_call=True,
 )
 def submit(n_clicks):
-    submit_tasks()
+    """
+    Calls `pipline.submit_tasks` function.
+    """
+    try:
+        submit_tasks()
+    except StopScriptRunnerExc:
+        pass
