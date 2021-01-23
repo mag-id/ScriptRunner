@@ -3,10 +3,11 @@
 instances for workinng with configs and scripts directories.
 """
 
-from base64 import b64decode
-from os import remove, walk
+from os import walk
 from pathlib import Path
 from typing import List
+
+from config import CONFIG_DIRECTORY, SCRIPT_DIRECTORY
 
 __all__ = ["config_handler", "script_handler"]
 
@@ -49,22 +50,6 @@ class FileHandler:
         with open(file=self.__dir / name, mode="w", encoding=encoding) as file:
             file.write(content)
 
-    def write_uploaded_file(self, name: str, content: str):
-        """
-        Takes file `name` and `content` as an encoded
-        string, writes it to the `directory`.
-        """
-        _type, encoded_string = content.split(",")
-        decoded_string = b64decode(encoded_string)
-        with open(file=self.__dir / name, mode="wb") as file:
-            file.write(decoded_string)
 
-    def delete_file(self, name: str):
-        """
-        Delete file from `directory` according to `name`.
-        """
-        remove(path=self.__dir / name)
-
-
-config_handler = FileHandler(Path("ScriptRunner/data/configs"))
-script_handler = FileHandler(Path("ScriptRunner/data/scripts"))
+config_handler = FileHandler(Path(CONFIG_DIRECTORY))
+script_handler = FileHandler(Path(SCRIPT_DIRECTORY))
