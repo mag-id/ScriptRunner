@@ -6,6 +6,7 @@ from queue import PriorityQueue
 from subprocess import run
 from typing import List, Tuple
 
+from exceptions import StopScriptRunnerExc
 from filehandler import config_handler
 from taskhandler import Task
 
@@ -62,13 +63,13 @@ def execute_task(task: Task):
 def handle_failure(failure: str):
     """
     Process exceptions according to keywords:
-    + if `"SKIP"` - skip and go to the next task;
-    + if `"STOP"` - stop tasks queue execution;
+    + if `"skip"` - skip exception and go to the next task;
+    + if `"stop"` - raise `StopScriptRunnerExc` and stop tasks queue execution;
     Also prints the keyword.
     """
     if failure == STOP:
         print(STOP)
-        raise Exception(STOP)
+        raise StopScriptRunnerExc
     else:
         print(SKIP)
 
