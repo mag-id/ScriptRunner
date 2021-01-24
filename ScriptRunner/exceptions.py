@@ -1,9 +1,17 @@
 """ScriptRunner custom exceptions."""
 
 
-class ScriptRunnerExc(BaseException):
+class ScriptRunnerException(BaseException):
     """Base ScriptRunner exception."""
 
 
-class StopScriptRunnerExc(ScriptRunnerExc):
+class FailuresException(ScriptRunnerException):
+    """Failures parent exception."""
+
+
+class StopKeywordFailures(FailuresException):
     """ScriptRunner `"stop"` keyword exception."""
+
+
+class UnknownKeywordFailures(FailuresException):
+    """ScriptRunner unknown keyword exception."""
