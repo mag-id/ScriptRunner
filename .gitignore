@@ -1,0 +1,4 @@
+# Directories
+ScriptRunnerEnv
+__pycache__
+.pytest_cache
