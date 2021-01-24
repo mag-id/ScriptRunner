@@ -6,12 +6,13 @@ from queue import PriorityQueue
 from subprocess import run
 from typing import List, Tuple
 
-from exceptions import StopScriptRunnerExc
+from exceptions import StopKeywordFailures, UnknownKeywordFailures
 from filehandler import config_handler
 from taskhandler import Task
 
 SKIP = "skip"
 STOP = "stop"
+UNKNOWN_KEYWORD_MESSAGE = "Unknown `'failures'` keyword, check config file."
 
 
 def submit_tasks():
@@ -66,15 +67,19 @@ def handle_failure(failure: str):
     + if `"skip"` - skip exception and go to the next task;
     + if `"stop"` - raise `StopScriptRunnerExc` and stop tasks queue execution;
     Also prints the keyword.
+
+    If unknown keyword passed - raises
+    `UnknownKeywordFailures(UNKNOWN_KEYWORD_MESSAGE)`.
     """
     if failure == STOP:
         print(STOP)
-        raise StopScriptRunnerExc
-    else:
+        raise StopKeywordFailures
+    elif failure == SKIP:
         print(SKIP)
+    else:
+        raise UnknownKeywordFailures(UNKNOWN_KEYWORD_MESSAGE)
 
 
-# https://www.youtube.com/watch?v=2Fp1N6dof0Y
 # https://docs.python.org/3.8/library/subprocess.html
 def run_shell(command: List[str]) -> Tuple[str, str]:
     """
