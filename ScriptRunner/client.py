@@ -2,12 +2,11 @@
 
 from typing import Dict, List
 
-import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 from dash import Dash, callback_context
 from dash.dependencies import Input, Output
-from exceptions import StopScriptRunnerExc
+from exceptions import StopKeywordFailures
 from filehandler import config_handler, script_handler
 from pipeline import submit_tasks
 
@@ -25,7 +24,7 @@ app.layout = html.Div(
                 html.H2("Configs"),
                 dcc.Dropdown(id="config-dropdown"),
                 dcc.Textarea(id="config-textarea"),
-                dbc.Button("update", id="config-update"),
+                html.Button("update", id="config-update"),
                 html.Div(id="config-input"),
                 html.Div(id="config-output"),
             ],
@@ -137,5 +136,5 @@ def submit(n_clicks):
     """
     try:
         submit_tasks()
-    except StopScriptRunnerExc:
+    except StopKeywordFailures:
         pass
