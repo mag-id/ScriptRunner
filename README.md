@@ -17,7 +17,7 @@ The final project for EPAM Autumn 2020 Python Course is **ScriptRunner - script 
 3. Functionality:
  * Script configuration edit form.
 
-## ScriptRunner v.1 functionality
+## ScriptRunner v.1 functionality (Python 3.8.7)
 
 * **Only Python scripts!**
 * See and update script configs.
