@@ -17,9 +17,8 @@ The final project for EPAM Autumn 2020 Python Course is **ScriptRunner - script 
 3. Functionality:
  * Script configuration edit form.
 
-## ScriptRunner v.1 functionality
+## ScriptRunner v.1.1 functionality
 
-* **Only Python scripts!**
 * See and update script configs.
 * See scripts and their code.
 * Submit scripts queue.
@@ -30,19 +29,25 @@ The final project for EPAM Autumn 2020 Python Course is **ScriptRunner - script 
 ```
 {
     "priority": 0,
+    "language_args": ["python"]
     "script": "name.py",
-    "arguments": ["arg", "arg"],
+    "script_args": ["arg", "arg"],
     "failures": "stop",
     "next_config": false
 }
 ```
 
 * `"priority"` - Integer represents task priority.
+* `"language_args"` - Language-specific arguments.
 * `"script"` - Name of the Python script.
-* `"arguments"` - Script arguments.
+* `"script_args"` - Script arguments.
 * `"failures"` - Specific keywords for controlling exception processing:
     * `"skip"` - skip exception and go to the next task.
     * `"stop"` - stop scripts queue execution.
 * `"next_config"` - deside what do after:
     * `"false"` - executes next script from queue according to their priopities.
     * `"name.json"` - script config which will be executed next out of priority.
+
+# Changelog
+* v.1.1 - Feature: adds language-specific arguments.
+* v.1 - Release: ScriptRunner.
