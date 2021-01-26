@@ -48,6 +48,6 @@ The final project for EPAM Autumn 2020 Python Course is **ScriptRunner - script 
     * `"false"` - executes next script from queue according to their priopities.
     * `"name.json"` - script config which will be executed next out of priority.
 
-# Changelog
+## Changelog
 * v.1.1 - Feature: adds language-specific arguments.
 * v.1 - Release: ScriptRunner.
