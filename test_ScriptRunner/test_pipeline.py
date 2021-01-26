@@ -72,7 +72,7 @@ def test_execute_task(monkeypatch, capsys, test_file):
 
     # Mocks `Task` instance.
     mocked_task = MagicMock()
-    mocked_task.command = ["python", pyscript]
+    mocked_task.arguments = ["python", pyscript]
     mocked_task.failures = SKIP
     mocked_task.next_task = False
 

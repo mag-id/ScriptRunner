@@ -15,8 +15,9 @@ class Task:
     Attributes:
     -----------
     + `priority` - Integer represents task priority.
+    + `language_args` - List of strings with language arguments.
     + `script` - String name of the script.
-    + `arguments` - List of strings represents script arguments.
+    + `script_args` - List of strings with script arguments.
     + `failures` - Strings with `pipeline` scpecific keyworks for exception processing.
     + `next_config` - String with name of the script config for next execution.
 
@@ -29,13 +30,14 @@ class Task:
     + `next_task` - Returns `Task` instance from `Task.next_config`.
     If `Task.next_config` is `False` - returns `False`.
 
-    + `command` - Returns command for Python shell script.
+    + `arguments` - Returns shell arguments.
 
     """
 
     priority: int
+    language_args: List[str]
     script: str
-    arguments: List[str]
+    script_args: List[str]
     failures: str
     next_config: str or False
 
@@ -55,8 +57,12 @@ class Task:
         return Task.from_config(self.next_config) if self.next_config else False
 
     @property
-    def command(self) -> List[str]:
+    def arguments(self) -> List[str]:
         """
-        Returns command for Python shell script.
+        Returns shell arguments.
         """
-        return ["python", script_handler.directory / self.script, *self.arguments]
+        return [
+            *self.language_args,
+            script_handler.directory / self.script,
+            *self.script_args,
+        ]

@@ -10,12 +10,13 @@ from ScriptRunner.taskhandler import Task
 CONFIG_NAME = "config.json"
 CONFIG_CONTENT = """{
     "priority": 1,
+    "language_args": ["python"],
     "script": "name.py",
-    "arguments": ["arg", "arg"],
+    "script_args": ["arg", "arg"],
     "failures": "stop",
     "next_config": false
 }"""
-CONFIG_TASK = Task(1, "name.py", ["arg", "arg"], "stop", False)
+CONFIG_TASK = Task(1, ["python"], "name.py", ["arg", "arg"], "stop", False)
 
 
 @pytest.fixture
@@ -48,8 +49,9 @@ class TestNextTask:
         """
         task = Task(
             priority=2,
+            language_args=["python"],
             script="name.py",
-            arguments=["arg"],
+            script_args=["arg"],
             failures="stop",
             next_config=CONFIG_NAME,
         )
@@ -63,9 +65,9 @@ def test_from_config(mock_read_file_and_write_config):
     assert Task.from_config(CONFIG_NAME) == CONFIG_TASK
 
 
-def test_command(monkeypatch):
+def test_arguments(monkeypatch):
     """
-    Passes test if `Task.command` returns valid values for python command.
+    Passes test if `Task.arguments` returns valid arguments.
     """
     scripts_dir = Path("scripts_dir")
     mocked_script_handler = MagicMock()
@@ -74,8 +76,8 @@ def test_command(monkeypatch):
         "ScriptRunner.taskhandler.script_handler",
         mocked_script_handler,
     )
-    assert CONFIG_TASK.command == [
-        "python",
+    assert CONFIG_TASK.arguments == [
+        *CONFIG_TASK.language_args,
         scripts_dir / CONFIG_TASK.script,
-        *CONFIG_TASK.arguments,
+        *CONFIG_TASK.script_args,
     ]
