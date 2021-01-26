@@ -34,3 +34,12 @@ repos:
     language: python
     types: [python]
     require_serial: true
+
+- repo: local
+  hooks:
+  - id: pytest
+    name: pytest
+    entry: pytest
+    language: python
+    types: [python]
+    require_serial: true
