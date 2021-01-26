@@ -46,7 +46,7 @@ def execute_task(task: Task):
     Executes `task` and prints `task`
     with `stdout` and `stderr`.
     """
-    stdout, stderr = run_shell(task.command)
+    stdout, stderr = run_shell(task.arguments)
 
     print(task)
     print(stdout)
@@ -81,9 +81,9 @@ def handle_failure(failure: str):
 
 
 # https://docs.python.org/3.8/library/subprocess.html
-def run_shell(command: List[str]) -> Tuple[str, str]:
+def run_shell(arguments: List[str]) -> Tuple[str, str]:
     """
-    Runs `command` in the shell and returns `stdout` and `stderr` as text.
+    Runs `arguments` in the shell and returns `stdout` and `stderr` as text.
     """
-    catched = run(args=command, shell=False, capture_output=True, text=True)
+    catched = run(args=arguments, shell=False, capture_output=True, text=True)
     return catched.stdout, catched.stderr
