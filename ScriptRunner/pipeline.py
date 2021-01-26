@@ -41,6 +41,10 @@ def execute_tasks_queue(tasks_queue: PriorityQueue):
         execute_task(tasks_queue.get())
 
 
+# TODO: execute_task
+# The better to separate execution logic and presentation logic.
+# It will be easier to read and test.
+# Also, read about `tee` command (for the printing of the script execution process).
 def execute_task(task: Task):
     """
     Executes `task` and prints `task`
@@ -61,6 +65,9 @@ def execute_task(task: Task):
         execute_task(next_task)
 
 
+# TODO: handle_failure
+# What if the script will write to the stderr? What behaviour will be?
+# Also, you can control exception processing by the return codes (0, 1).
 def handle_failure(failure: str):
     """
     Process exceptions according to keywords:

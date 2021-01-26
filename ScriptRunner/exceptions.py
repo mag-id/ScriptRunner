@@ -1,6 +1,7 @@
 """ScriptRunner custom exceptions."""
 
 
+# TODO: Inherit from `Exception`, not `BaseException`.
 class ScriptRunnerException(BaseException):
     """Base ScriptRunner exception."""
 

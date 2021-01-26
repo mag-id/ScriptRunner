@@ -49,6 +49,9 @@ class TestHandleFailure:
             handle_failure("something_unknown")
 
 
+# TODO: test_execute_task
+# See `execute_task` comment, if realisation will be separated it will be more testable.
+# Also, the test can be simplified using fixtures.
 def test_execute_task(monkeypatch, capsys, test_file):
     """
     Generates python script, executes with mocked task
