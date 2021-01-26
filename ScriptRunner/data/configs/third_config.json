@@ -1,7 +1,8 @@
 {
     "priority": 3,
+    "language_args": ["python"],
     "script": "third_script.py",
-    "arguments": ["3"],
+    "script_args": ["3"],
     "failures": "skip",
     "next_config": false
 }

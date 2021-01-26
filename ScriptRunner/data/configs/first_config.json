@@ -1,7 +1,8 @@
 {
     "priority": 1,
+    "language_args": ["python"],
     "script": "first_script.py",
-    "arguments": ["10"],
+    "script_args": ["10"],
     "failures": "stop",
     "next_config": "second_config.json"
 }
